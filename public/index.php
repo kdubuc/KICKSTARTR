@@ -19,7 +19,18 @@ require_once 'Zend/Application.php';
 // Create application, bootstrap, and run
 $application = new Zend_Application(
     APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
+	array(
+        'config' => array(
+            APPLICATION_PATH . '/configs/env.ini',
+			APPLICATION_PATH . '/configs/application.ini',
+            APPLICATION_PATH . '/configs/cache.ini',
+			APPLICATION_PATH . '/configs/db.ini',
+			APPLICATION_PATH . '/configs/layout.ini',
+			APPLICATION_PATH . '/configs/modules.ini',
+			APPLICATION_PATH . '/configs/routes.ini',
+			APPLICATION_PATH . '/configs/translation.ini'
+        )
+    )
 );
 $application->bootstrap()
             ->run();

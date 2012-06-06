@@ -34,6 +34,6 @@
 				
 			// Icône du site
 			$view->headLink()
-				->headLink(array("rel" => "favicon", "href" => "/images/favicon.ico"), "PREPEND");
+				->headLink(array("rel" => "shortcut icon", "href" => "/images/favicon.ico"));
 		}
 	}

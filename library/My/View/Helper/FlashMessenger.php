@@ -19,7 +19,7 @@
 			$this->_fm->clearMessages();
 		}
 	 
-		public function output($my_key = null, $template = '<li class="%s" >%s</li>') {
+		public function output($my_key = null, $template = '<li class="alert alert-%s" ><button data-dismiss="alert" class="close">&times;</button><h4 class="alert-%s">%s</h4>%s</li>') {
 
 			// On récupère les messages
 			$array_messages = $this->getMessages();
@@ -30,14 +30,11 @@
 			// On stocke les messages
 			foreach ($array_messages as $row_message) {
 
-				if (is_array($row_message)) {
-
-					list($key, $row_message) = each($row_message);
-				}
+				$key = $row_message["context"];
 
 				if($my_key == null || $key == $my_key ) {
 
-					$output .= sprintf($template, $key, $row_message);
+					$output .= sprintf($template, $key, $key, $row_message["title"], $row_message["message"]);
 				}
 			}
 

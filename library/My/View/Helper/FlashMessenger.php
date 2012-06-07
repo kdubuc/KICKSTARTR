@@ -44,12 +44,13 @@
 		public function getMessages() {
 		
 			// Messages
-			$array_messages = $this->_fm->getMessages();
+			//$array_messages = $this->_fm->getMessages();
 			
 			// Messages en cours
 			$array_currentMessages = $this->_fm->getCurrentMessages();
 
-			return array_merge($array_currentMessages, $array_messages);
+			// return array_merge($array_currentMessages, $array_messages);
+			return $array_currentMessages;
 		}
 
 		public function hasMessages() {

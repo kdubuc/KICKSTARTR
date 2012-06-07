@@ -11,18 +11,21 @@
 			$this->view = $view;
 		}
 	
-		public function button($name, $icon = null, $url = null, $attribs = false) {
+		public function button($label, $url = null, $attribs = null, $icon = null) {
 		
-			// Attributs en plus
-			if ($attribs) {
-			
-				$attribs = $this->_htmlAttribs($attribs);
+			// Ajout de la classe btn
+			if(isset($attribs["class"]))
+			{
+				$attribs["class"] .= " btn";
 			}
-			else {
-			
-				$attribs = '';
+			else
+			{
+				$attribs["class"] = "btn";
 			}
 		
+			// Gestion des attributs
+			$attribs = $this->_htmlAttribs($attribs);
+
 			// Construction de l'url
 			if( is_array($url) ) {
 			
@@ -32,14 +35,14 @@
 			// Si il y a une icone de spécifiée, on la formalise
 			if($icon != null) {
 			
-				$icon = '<i class="button-icon button-icon-'.$icon.'" ></i>';
+				$icon = '<i class="'.$icon.'" ></i>';
 			}
 			else {
 			
 				$icon = "";
 			}
 			
-			return '<a href="'.$url.'" '.$attribs.'  role="button" >'.$icon.'<span>'.$name.'</span></a>';
+			return '<a href="'.$url.'" '.$attribs.'  >'.$icon. ($icon != null ? ' ' : '') .$label.'</a>';
 
 		}
 	}

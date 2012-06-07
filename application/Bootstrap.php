@@ -11,6 +11,15 @@
 			parent::run();
 		}
 		
+		protected function _initAutoload() {
+		
+			$moduleLoader = new Zend_Application_Module_Autoloader(array(
+				'namespace' => 'Application',
+				'basePath' => APPLICATION_PATH));
+
+			return $moduleLoader;
+		}
+		
 		private function loadNavigation()
 		{
 		
@@ -32,5 +41,4 @@
 			$front->addControllerDirectory( APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'module' . DIRECTORY_SEPARATOR . 'controllers', 'module');
 		}
 		*/
-
 	}

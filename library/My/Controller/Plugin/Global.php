@@ -3,27 +3,32 @@
 	class My_Controller_Plugin_Global extends Zend_Controller_Plugin_Abstract {
 	
 		private $request;
+		
+		// On enregistre le plugin Global du module actuel
+		public function routeShutdown(Zend_Controller_Request_Abstract $request) {
+		
+			$className = $request->getModuleName() != 'default' ? ucfirst(strtolower(trim($request->getModuleName()))) . '_Plugin_Global' : 'Application_Plugin_Global';
+			
+			if(!class_exists($className))
+			{
+				throw new Zend_Exception("Le plugin global n'a pas été trouvé.", 500);
+			}
+			
+			Zend_Controller_Front::getInstance()->registerPlugin(new $className);
+		}
 
 		public function preDispatch(Zend_Controller_Request_Abstract $request)	{
 
 			$this->request = $request;
 			
 			// On charge les ressources du module
-			// $this->loadResources();
+			//$this->loadResources();
 
 			// Désactive le layout quand une requete ajax est envoyée
 			$this->disableLayoutAjax();
 				
 			// Chargement des aides d'actions en fonction du module
 			$this->loadActionHelpers();
-		}
-		
-		public function routeShutdown(Zend_Controller_Request_Abstract $request) {
-		
-			$this->request = $request;
-		
-			// Chargement du plugin Global (si il existe)
-			$this->loadGlobalModulePlugin();
 		}
 		
 		// Récupère le lien vers la racine du module
@@ -43,19 +48,23 @@
 		
 		// On charge les ressources du module
 		private function loadResources() {
-		//Zend_Controller_Front::getInstance()->getControllerDirectory($module);
+		
 			$module = $this->request->getModuleName();
+			
+			if($module == 'default')
+			{
+				$module = 'Application';
+			}
 		
 			$resourceLoader = new Zend_Loader_Autoloader_Resource(  
 				array(
 					'namespace' => ucfirst(strtolower(trim($module))),  
-					'basePath' => APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $module
+					'basePath' => $this->getModulePath()
 				)
 			);
 			
-			Zend_Debug::Dump($resourceLoader->getDefaultResourceType());
-			
-			// $resourceLoader->addResourceType('plugin', 'plugins/', 'Plugin');
+			$resourceLoader->addResourceType('plugin', 'plugins/', 'Plugin');
+			$resourceLoader->addResourceType('form', 'forms/', 'Form');
 		}
 		
 		// Désactive le layout quand une requete ajax est envoyée
@@ -74,14 +83,14 @@
 			$module = $this->request->getModuleName();
 			$controller = $this->request->getControllerName();
 			
-			$path = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'controllers'. DIRECTORY_SEPARATOR . 'helpers';
+			$path = Zend_Controller_Front::getInstance()->getControllerDirectory($module) . DIRECTORY_SEPARATOR . 'helpers';
 			$namespace = ucfirst(strtolower(trim($module))) . '_Controller_Helper_';
 			
 			Zend_Controller_Action_HelperBroker::addPath($path, $namespace);
 			*/
 		}
 		
-		// Chargement du plugin Global (si il existe)
+		/*
 		private function loadGlobalModulePlugin() {
 		
 			$module = $this->request->getModuleName();
@@ -99,7 +108,8 @@
 			
 			$resourceLoader->addResourceType('plugin', 'plugins/', 'Plugin');
 
-			Zend_Controller_Front::getInstance()->registerPlugin(new $className);
+			
 		}
+		*/
 		
 	}

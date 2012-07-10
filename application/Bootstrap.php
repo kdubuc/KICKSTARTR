@@ -35,10 +35,15 @@
 		protected function _initModuleControllerDirectories()
 		{
 			$this->bootstrap('FrontController');
-
 			$front =  $this->getResource('FrontController');
 			
-			$front->addControllerDirectory( APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'module' . DIRECTORY_SEPARATOR . 'controllers', 'module');
+			// Liste des modules (noms)
+			$modules = array();
+			
+			foreach($modules as $module)
+			{
+				$front->addControllerDirectory( APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $module . DIRECTORY_SEPARATOR . 'controllers', $module);
+			}
 		}
 		*/
 	}

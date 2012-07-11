@@ -30,8 +30,23 @@
 				
 			// Chargement de la navigation XML (+ fusion avec le XML de navigation du module courant)
 			$view = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');
-			$config = new Zend_Config_Xml(APPLICATION_PATH . '/configs/navigation.xml', 'nav');
-			$view->navigation( new Zend_Navigation($config->toArray()) );
+			
+			$config_navigation_default = new Zend_Config_Xml(APPLICATION_PATH . '/configs/navigation.xml', 'nav');
+			$array_navigation = $config_navigation_default->toArray();
+			
+			if($request->getModuleName() != 'default')
+			{
+				$XMLModuleNavigationXML = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $request->getModuleName() . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'navigation.xml';
+				
+				if(file_exists($XMLModuleNavigationXML))
+				{
+					$config_navigation_module = new Zend_Config_Xml($XMLModuleNavigationXML, 'nav');
+					$array_navigation_module = $config_navigation_module->toArray();
+					$array_navigation = array_merge_recursive($array_navigation, $array_navigation_module);
+				}
+			}
+			
+			$view->navigation( new Zend_Navigation($array_navigation) );
 				
 			// Chargement des aides d'actions en fonction du module
 			// $this->loadActionHelpers();

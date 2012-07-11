@@ -80,7 +80,8 @@
 				);
 				
 				$resourceLoader->addResourceType('plugin', 'plugins/', 'Plugin');
-				// $resourceLoader->addResourceType('form', 'forms/', 'Form');
+				$resourceLoader->addResourceType('form', 'forms/', 'Form');
+				$resourceLoader->addResourceType('model', 'models/', 'Model');
 			}
 		}
 		
